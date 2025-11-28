@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -22,14 +24,15 @@ class UserController extends Controller
 {
     function welcome()
     {
-        $categories = Category::withCount('quizzes')->take(5)->orderBy('quizzes_count','desc')->get();
-        $quizData = Quiz::withCount('Records')->take(5)->orderBy('Records_count','desc')->get();
-        return view('welcome', ["categories" => $categories,"quizData" => $quizData]);
+        $categories = Category::withCount('quizzes')->take(5)->orderBy('quizzes_count', 'desc')->get();
+        $quizData = Quiz::withCount('Records')->take(5)->orderBy('Records_count', 'desc')->get();
+        return view('welcome', ["categories" => $categories, "quizData" => $quizData]);
     }
 
-    function categoryList(){
-        $categories = Category::withCount('quizzes')->orderBy('quizzes_count','desc')->paginate(3);
-        return view('user-category',["categories"=>$categories]);
+    function categoryList()
+    {
+        $categories = Category::withCount('quizzes')->orderBy('quizzes_count', 'desc')->paginate(3);
+        return view('user-category', ["categories" => $categories]);
     }
 
     function userQuizList($id, $category)
@@ -100,7 +103,7 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return redirect('user-login')->with('message-error','User not Valid , Please Check Your Email and Password');
+            return redirect('user-login')->with('message-error', 'User not Valid , Please Check Your Email and Password');
         }
         if ($user) {
             Session::put('user', $user);
@@ -222,7 +225,7 @@ class UserController extends Controller
         $link = Crypt::encryptString($request->email);
         $link = url('/user-forgot-password', $link);
         Mail::to($request->email)->send(new UserForgotPassword($link));
-        return redirect('/')->with('message-success','Please Check Your Email to Set Password');
+        return redirect('/')->with('message-success', 'Please Check Your Email to Set Password');
     }
 
     function userResetForgotPassword($email)
@@ -242,17 +245,31 @@ class UserController extends Controller
         if ($user) {
             $user->password = Hash::make($request->password);
             if ($user->save()) {
-                return redirect('user-login')->with('message-success','Password is Set, Please login with New Password');
+                return redirect('user-login')->with('message-success', 'Password is Set, Please login with New Password');
             }
         }
     }
 
-    function certificate(){
-        $data=[];
-        $data['quiz']=str_replace('-',' ',Session::get('currentQuiz')['quizName']);
-        $data['name']=Session::get('user')->username;
-        return view('certificate',['data'=>$data]);
+    function certificate()
+    {
+        $data = [];
+        $data['date'] = now()->format('d F Y');
+        $data['quiz'] = str_replace('-', ' ', Session::get('currentQuiz')['quizName']);
+        $data['name'] = Session::get('user')->username;
+        return view('certificate', ['data' => $data]);
+    }
+
+    function downloadCertificate()
+    {
+        $data = [];
+        $data['date'] = now()->format('d F Y');
+        $data['quiz'] = str_replace('-', ' ', Session::get('currentQuiz')['quizName']);
+        $data['name'] = Session::get('user')->username;
+
+        $pdf = Pdf::loadView('certificate', ['data' => $data]);
+        return $pdf->download('certificate.pdf');
     }
 }
+
 
 

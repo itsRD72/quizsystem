@@ -54,10 +54,19 @@
                     </tr>
                 @endforeach
             </tbody>
-        </table> 
-            <div class="">
-                {{ $categories->links() }}
-            </div>
+        </table>
+            <div class="w-75 mx-auto d-flex justify-content-between align-items-center mt-3">
+    <!-- Left: Showing results -->
+    <div>
+        Showing {{ $categories->firstItem() }} to {{ $categories->lastItem() }} of {{ $categories->total() }} results
+    </div>
+
+    <!-- Right: Pagination links -->
+    <div>
+        {{ $categories->links('pagination::bootstrap-5') }}
+    </div>
+</div>
+
     </div>
 
     <x-user-footer></x-user-footer>

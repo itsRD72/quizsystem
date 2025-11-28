@@ -1,42 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <title>Certificate Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate of Completion</title>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f7f7f7;
+}
+
+/* Certificate container */
+.certificate-container {
+    width: 100%;
+    max-width: 700px;      /* Safe width for A4 */
+    margin: 50px auto;
+    padding: 30px;
+    border: 8px solid #0dcaf0;
+    border-radius: 15px;    /* Rounded corners */
+    background: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Logo */
+.certificate-logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+/* Title */
+.certificate-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #0dcaf0;
+    margin-bottom: 20px;
+}
+
+/* Subtitle */
+.certificate-subtitle {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* Name */
+.certificate-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* Course / Quiz */
+.certificate-course {
+    font-size: 22px;
+    margin: 15px 0;
+}
+
+/* Date */
+.certificate-date {
+    margin-top: 30px;
+    font-size: 16px;
+}
+
+/* Buttons (browser only) */
+.pdf-buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+.pdf-buttons a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+.pdf-buttons .btn-back {
+    border: 2px solid #0dcaf0;
+    color: #0dcaf0;
+}
+.pdf-buttons .btn-download {
+    background: #0dcaf0;
+    color: #fff;
+    border: none;
+}
+</style>
 </head>
-<body class="certificate-body">
+<body>
 
-    <div class="d-flex justify-content-center align-items-center py-5">
-        <div class="certificate-card text-center p-5">
+<div class="certificate-container">
 
-            <svg xmlns="http://www.w3.org/2000/svg" height="60px" viewBox="0 -960 960 960" width="60px" fill="#0dcaf0" class="mb-3">
-                <path d="m385-412 36-115-95-74h116l38-119 37 119h117l-95 74 35 115-94-71-95 71ZM244-40v-304q-45-47-64.5-103T160-560q0-136 92-228t228-92q136 0 228 92t92 228q0 57-19.5 113T716-344v304l-236-79-236 79Zm236-260q109 0 184.5-75.5T740-560q0-109-75.5-184.5T480-820q-109 0-184.5 75.5T220-560q0 109 75.5 184.5T480-300ZM304-124l176-55 176 55v-171q-40 29-86 42t-90 13q-44 0-90-13t-86-42v171Zm176-86Z"/>
-            </svg>
+    
+    <div class="certificate-title">Certificate of Completion</div>
+    <div class="certificate-subtitle">This is proudly presented to</div>
+    <div class="certificate-name">{{ $data['name'] }}</div>
+    <div class="certificate-subtitle">for successfully completing the Quiz</div>
+    <div class="certificate-course">{{ $data['quiz'] }}</div>
+    <div class="certificate-date">Date: {{ $data['date'] }}</div>
 
-            <h1 class="certificate-title mt-2">Certificate of Completion</h1>
-
-            <p class="certificate-subtitle mt-3">This is proudly presented to</p>
-
-            <h2 class="certificate-name">Raj Chavda</h2>
-
-            <p class="certificate-subtitle mt-2">for successfully completing the Quiz</p>
-
-            <h3 class="certificate-course">Something</h3>
-
-            <p class="certificate-date mt-4">Date: 27 November 2025</p>
-
-            <div class="decorative-line mt-4 mb-4 mx-auto"></div>
-        </div>
+    <!-- Browser buttons -->
+    <div class="pdf-buttons">
+        <a href="/" class="btn-back">Back</a>
+        <a href="{{ url('download-certificate') }}" class="btn-download">Download PDF</a>
     </div>
 
-    <!-- Buttons centered below certificate -->
-    <div class="text-center mb-5">
-        <a href="#" class="btn btn-outline-primary btn-lg me-3">Back</a>
-        <a href="#" class="btn btn-primary btn-lg">Download</a>
-    </div>
+</div>
 
 </body>
 </html>

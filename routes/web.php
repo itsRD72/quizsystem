@@ -15,6 +15,8 @@ Route::get('user-logout', [UserController::class, 'userLogout']);
 Route::get('user-signup-quiz', [UserController::class, 'userSignupQuiz']);
 Route::get('category-list', [UserController::class, 'categoryList']);
 Route::get('certificate', [UserController::class, 'certificate']);
+Route::get('download-certificate', [UserController::class, 'downloadCertificate']);
+
 
 
 
@@ -61,7 +63,7 @@ Route::post('login', [AdminController::class, 'login']);
 //this is for admin dashboard
 
 
-Route::middleware('CheckAdminAuth')->group(function () {
+// Route::middleware('CheckAdminAuth')->group(function () {
 
     Route::get('dashboard', [AdminController::class, 'dashboard']);
     Route::get('admin-logout', [AdminController::class, 'logout']);
@@ -81,4 +83,4 @@ Route::middleware('CheckAdminAuth')->group(function () {
 
     //this is for show quiz list
     Route::get('quiz-list/{id}/{category}', [AdminController::class, 'quizList']);
-});
+

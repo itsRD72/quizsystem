@@ -33,25 +33,30 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $key=>$user)
+                @forelse($users as $key => $user)
                     <tr>
-                        <td>{{$key+1}}</td>
-                        <td>{{$user->username}}</td>
-                        <td>{{$user->email}}</td>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $user->username }}</td>
+                        <td>{{ $user->email }}</td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="3">No users found.</td>
+                    </tr>
+                @endforelse
+
             </tbody>
         </table>
         <div class="w-75 mx-auto d-flex justify-content-between align-items-center mt-3">
-    <div>
-        Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }} results
-    </div>
-    <div>
-        {{ $users->links('pagination::bootstrap-5') }}
-    </div>
-</div>
+            <div>
+                Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() ?? 0 }}
+                results
+            </div>
+            <div>
+                {{ $users->links('pagination::bootstrap-5') }}
+            </div>
 
-
+        </div>
     </div>
 </body>
 

@@ -16,9 +16,10 @@ class CheckAdminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Session::has('admin')){
-            return redirect('admin-login');
-        } 
+       if (!Session::has('admin')) {
+            return redirect()->route('admin-login');
+        }
         return $next($request);
     }
+
 }

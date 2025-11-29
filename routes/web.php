@@ -19,7 +19,6 @@ Route::get('download-certificate', [UserController::class, 'downloadCertificate'
 
 
 
-
 Route::get('user-login', function(){
     if(!session()->has('user')){
        return view('user-login');
@@ -58,14 +57,14 @@ Route::middleware('CheckUserAuth')->group(function () {
 
 
 //this is for admin login 
-Route::view('admin-login', 'admin-login');
+Route::view('admin-login', 'admin-login')->name('admin-login');
 Route::post('login', [AdminController::class, 'login']);
 //this is for admin dashboard
 
 
-// Route::middleware('CheckAdminAuth')->group(function () {
+Route::middleware('CheckAdminAuth')->group(function () {
 
-    Route::get('dashboard', [AdminController::class, 'dashboard']);
+    Route::get('dashboard', [AdminController::class, 'dashboard']);    
     Route::get('admin-logout', [AdminController::class, 'logout']);
     //this is for categories
     Route::get('admin-categories', [AdminController::class, 'categories']);
@@ -84,3 +83,4 @@ Route::post('login', [AdminController::class, 'login']);
     //this is for show quiz list
     Route::get('quiz-list/{id}/{category}', [AdminController::class, 'quizList']);
 
+});

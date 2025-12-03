@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+< lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,8 @@
 <body class="pt-5">
     <x-user-navbar></x-user-navbar>
             
-    <x-user-footer></x-user-footer>
-</body><div class="main-content">
+    
+<div class="main-content">
                <div class="text-center my-4">
                     <h2 class="sub-page-title mt-5">Category Name: {{str_replace('-',' ',$category)}}</h2>
                 </div>
@@ -42,4 +42,6 @@
                     </tbody>
                 </table>
             </div>
+            <x-user-footer></x-user-footer>
+</body>
 </html>

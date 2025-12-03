@@ -57,14 +57,17 @@ Route::middleware('CheckUserAuth')->group(function () {
 
 
 //this is for admin login 
-Route::view('admin-login', 'admin-login')->name('admin-login');
-Route::post('login', [AdminController::class, 'login']);
+Route::view('admin-login', 'admin-login');
+Route::post('admin-login', [AdminController::class, 'login'])->name('admin.login');
 //this is for admin dashboard
 
 
 Route::middleware('CheckAdminAuth')->group(function () {
 
-    Route::get('dashboard', [AdminController::class, 'dashboard']);    
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('admin-users', [AdminController::class, 'userList']);
+
     Route::get('admin-logout', [AdminController::class, 'logout']);
     //this is for categories
     Route::get('admin-categories', [AdminController::class, 'categories']);

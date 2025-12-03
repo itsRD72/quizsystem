@@ -19,7 +19,9 @@
 </head>
 
 <body>
-    <x-navbar :name="$name"></x-navbar>
+    <x-navbar :name="$admin->name"></x-navbar>
+
+
     <div class="container mt-4">
         <div class="text-center my-4">
             <h2 class="fw-bold text-primary">Category List</h2>

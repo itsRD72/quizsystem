@@ -45,5 +45,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'CheckAdminAuth' => \App\Http\Middleware\CheckAdminAuth::class, // <-- your admin middleware
         // add more route middleware here if needed
+        'CheckUserAuth' => \App\Http\Middleware\CheckUserAuth::class,
     ];
 }

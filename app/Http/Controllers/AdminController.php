@@ -9,55 +9,59 @@ use App\Models\Quiz;
 use App\Models\Mcq;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     // Admin login
-    function login(Request $request)
+    public function login(Request $request)
     {
-        $request->validate([
+        // Validate input
+        $data = $request->validate([
             "name" => "required",
             "password" => "required|min:6"
         ]);
 
-        $admin = Admin::where([
-            ['name', '=', $request->name],
-            ['password', '=', $request->password]
-        ])->first();
-
-        if (!$admin) {
-            return back()->with('error', 'Invalid credentials');
+        // Attempt admin login using 'admin' guard
+        if (Auth::guard('admin')->attempt($data)) {
+            $request->session()->regenerate(); // secure the session
+            return redirect()->route('dashboard'); // middleware will allow access
+        } else {
+            return back()->withErrors(['Invalid credentials'])->withInput();
         }
-
-        // Store admin as array in session
-        Session::put('admin', [
-            'id' => $admin->id,
-            'name' => $admin->name
-        ]);
-
-        return redirect('dashboard');
     }
+
 
     // Admin dashboard
     function dashboard()
     {
-        $admin = Session::get('admin');
-
-
-        $name = $admin['name'] ?? 'Admin';
-        // Get users with pagination
-        $users = User::orderBy('id', 'desc')->paginate(4);
-
-         return view('dashboard', [
-        'name' => $name,
-        'users' => $users
-    ]);
+        $admin = Auth::guard('admin')->user(); // logged-in admin
+        $users = User::paginate(4);            // fetch users with pagination
+        return view('dashboard', compact('admin', 'users')); // pass data to view
     }
+
+
+    function userList()
+    {
+        $admin = Auth::guard('admin')->user();
+        if (!$admin) {
+            return redirect('admin-login');
+        }
+
+        $users = User::paginate(4); // fetch 10 users per page
+
+        return view('users', [
+            'name' => $admin->name,
+            'users' => $users
+        ]);
+    }
+
 
     // Categories list
     function categories()
     {
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         if (!$admin) {
             return redirect('admin-login');
@@ -74,7 +78,7 @@ class AdminController extends Controller
     // Logout
     function logout()
     {
-        Session::forget('admin');
+        Auth::guard('admin')->logout();
         return redirect('admin-login');
     }
 
@@ -85,7 +89,8 @@ class AdminController extends Controller
             "category" => "required|min:3|unique:categories,category"
         ]);
 
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         $category = new Category();
         $category->category = $request->category;
@@ -113,7 +118,8 @@ class AdminController extends Controller
     // Add quiz
     function addQuiz()
     {
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         if (!$admin) {
             return redirect('admin-login');
@@ -164,7 +170,8 @@ class AdminController extends Controller
 
         $mcq = new Mcq();
         $quiz = Session::get('quizDetails');
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         $mcq->question = $request->question;
         $mcq->a = $request->a;
@@ -197,7 +204,8 @@ class AdminController extends Controller
     // Show quiz MCQs
     function showQuiz($id)
     {
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         if (!$admin) {
             return redirect('admin-login');
@@ -217,7 +225,8 @@ class AdminController extends Controller
     // Quiz list by category
     function quizList($id, $category)
     {
-        $admin = Session::get('admin');
+        $admin = Auth::guard('admin')->user();
+
 
         if (!$admin) {
             return redirect('admin-login');

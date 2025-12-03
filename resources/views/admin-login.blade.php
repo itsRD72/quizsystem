@@ -16,7 +16,7 @@
                     {{$message}}
                 </div>
                 @enderror
-        <form action="/login" method="post"> 
+        <form action="/admin-login" method="post"> 
             @csrf
             <div class="mb-3">
                 <label for="" class="form-label">Admin Name</label>
